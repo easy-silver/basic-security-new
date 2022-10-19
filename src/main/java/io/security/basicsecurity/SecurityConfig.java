@@ -14,7 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //인증 정책
         http
                 .formLogin()
-                .loginPage("/loginPage")
+//                .loginPage("/loginPage")
                 .defaultSuccessUrl("/")
                 .failureForwardUrl("/login")
                 //usernameParameter, passwordParameter, loginProcessingUrl 세 가지는 로그인 화면 UI 파라미터명과 맞춰야 한다.
