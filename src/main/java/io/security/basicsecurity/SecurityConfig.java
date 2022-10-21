@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .sessionManagement()
-                .sessionFixation().none();
+                .sessionFixation().changeSessionId();
 
         //인가 정책
         http
