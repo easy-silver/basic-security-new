@@ -17,8 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .sessionManagement()
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(false);
+                .sessionFixation().none();
 
         //인가 정책
         http
