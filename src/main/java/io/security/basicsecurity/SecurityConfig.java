@@ -51,7 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))
                 .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/denied"));
     }
 }
