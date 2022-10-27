@@ -28,10 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //인증 정책
-        http
-                .formLogin();
-
         //인가 정책
         http
                 .authorizeRequests()
@@ -39,5 +35,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/pay").hasRole("ADMIN")
                 .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
                 .anyRequest().authenticated();
+
+        http
+                .formLogin();
+
+        http
+                .exceptionHandling()
+                .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))
+                .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/denied"));
     }
 }
