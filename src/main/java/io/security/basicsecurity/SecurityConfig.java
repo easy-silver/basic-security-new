@@ -1,56 +1,37 @@
 package io.security.basicsecurity;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
 
+@Order(0)
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user")
-                .password("{noop}1111")
-                .roles("USER")
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .antMatcher("/admin/**")
+                .authorizeRequests()
+                .anyRequest().authenticated()
                 .and()
-                .withUser("sys")
-                .password("{noop}1111")
-                .roles("SYS")
-                .and()
-                .withUser("admin")
-                .password("{noop}1111")
-                .roles("ADMIN");
+                .httpBasic();
     }
+}
+
+@Order(1)
+@Configuration
+class SecurityConfig2 extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //인가 정책
         http
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/user").hasRole("USER")
-                .antMatchers("/admin/pay").hasRole("ADMIN")
-                .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
-                .anyRequest().authenticated();
-
-        http
-                .formLogin()
-                .successHandler((request, response, authentication) -> {
-                    RequestCache requestCache = new HttpSessionRequestCache();
-                    SavedRequest savedRequest = requestCache.getRequest(request, response);
-                    String redirectUrl = savedRequest.getRedirectUrl();
-                    response.sendRedirect(redirectUrl);
-                });
-
-        http
-                .exceptionHandling()
-                .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/denied"));
+                .anyRequest().permitAll()
+                .and()
+                .formLogin();
     }
 }
