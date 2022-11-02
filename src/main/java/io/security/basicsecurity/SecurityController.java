@@ -21,13 +21,8 @@ public class SecurityController {
         return "home";
     }
 
-    @GetMapping("/thread")
-    public String thread() {
-        new Thread(() -> {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        }).start();
-
-        return "thread";
+    @GetMapping("/user")
+    public String user() {
+        return "user";
     }
-
 }
